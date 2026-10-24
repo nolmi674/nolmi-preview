@@ -5,3 +5,5 @@ html{scroll-behavior:smooth}#catalog{scroll-margin-top:20px}.product{transition:
 .art-link{display:block}.art-link:focus-visible{outline:3px solid #b76983;outline-offset:-3px}.product-facts{margin:24px 0;padding:20px 24px;background:#fff9f7;border:1px solid #e8e4e2;border-radius:16px}.product-facts h2{font-size:19px;margin:0 0 12px}.product-facts p{margin:8px 0}.product-facts strong{font-weight:650}@media(max-width:700px){.product-facts{padding:18px 16px}.art-link .placeholder{min-height:130px}}
 
 .placeholder.has-image{display:block;background:#fff}.placeholder.has-image img{display:block;width:100%;height:100%;aspect-ratio:1;object-fit:contain}
+
+.source-link{display:inline-block;margin:10px 0 22px;color:#9e4866;text-decoration:underline;text-underline-offset:3px}.source-link:focus-visible{outline:2px solid #9e4866;outline-offset:3px}
