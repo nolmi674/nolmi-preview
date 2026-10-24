@@ -6,6 +6,7 @@ function render(){
  const q=search.value.trim().toLocaleLowerCase("ja-JP");
  const matches=products.filter(p=>(category.value==="すべて"||p.category===category.value)&&p.name.toLocaleLowerCase("ja-JP").includes(q));
  grid.replaceChildren();
+ const count=document.querySelector("#result-count");if(count)count.textContent=matches.length+"件の商品候補";
  for(const p of matches){
   const card=document.createElement("article");card.className="product";
   const art=document.createElement("div");art.className="placeholder";art.setAttribute("aria-label","商品画像は準備中");
