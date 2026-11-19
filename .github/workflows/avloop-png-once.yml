@@ -1,0 +1,44 @@
+name: Build AV LOOP PNG favicon from owned SVG
+on:
+  push:
+    branches: [main]
+    paths: ['site-icons/avloop-png-once.trigger']
+permissions:
+  contents: write
+concurrency:
+  group: avloop-png-from-svg
+  cancel-in-progress: false
+jobs:
+  rasterize:
+    if: github.repository == 'nolmi674/nolmi-preview'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Rasterize the existing owned SVG only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --quiet 'cairosvg==2.8.2'
+          python3 - <<'PY'
+          from pathlib import Path
+          import cairosvg
+          src=Path("site-icons/avloop.svg")
+          dst=Path("site-icons/avloop-512.png")
+          assert src.is_file() and src.stat().st_size<10000
+          assert not dst.exists()
+          cairosvg.svg2png(url=str(src),write_to=str(dst),output_width=512,output_height=512)
+          payload=dst.read_bytes()
+          assert payload[:8]==b'\x89PNG\r\n\x1a\n' and 500<len(payload)<100000
+          print("AVLOOP_PNG_GENERATED=512x512")
+          PY
+      - name: Commit only the single first-party PNG
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- site-icons/avloop-512.png
+          test "$(git diff --cached --name-only)" = "site-icons/avloop-512.png"
+          git commit -m "Add 512px PNG fallback for AV LOOP Android Chrome favicon"
+          git push origin HEAD:main
